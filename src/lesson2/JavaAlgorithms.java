@@ -3,6 +3,10 @@ package lesson2;
 import kotlin.NotImplementedError;
 import kotlin.Pair;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Set;
 
 @SuppressWarnings("unused")
@@ -30,9 +34,37 @@ public class JavaAlgorithms {
      * Например, для приведённого выше файла результат должен быть Pair(3, 4)
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
+     *
+     * Время: O(N^2), N = количество строк в inputName
+     * Память: O(N)
      */
-    static public Pair<Integer, Integer> optimizeBuyAndSell(String inputName) {
-        throw new NotImplementedError();
+    static public Pair<Integer, Integer> optimizeBuyAndSell(String inputName) throws IOException {
+        FileReader fr = new FileReader(inputName);
+        Scanner scan = new Scanner(fr);
+        ArrayList<Double> arr = new ArrayList<>();
+        double value;
+
+        while (scan.hasNextLine()) {
+            value = Double.parseDouble(scan.nextLine());
+            arr.add(value);
+        }
+
+        double max = 0;
+        int firstInPair = 0;
+        int secondInPair = 0;
+        for (int i = 0; i < arr.size(); i++) {
+            double nowI = arr.get(i);
+            for (int j = i; j < arr.size(); j++) {
+                double nowJ = arr.get(j);
+                double now = nowJ - nowI;
+                if (now > max) {
+                    max = now;
+                    firstInPair = i + 1;
+                    secondInPair = j + 1;
+                }
+            }
+        }
+        return new Pair(firstInPair, secondInPair);
     }
 
     /**
@@ -83,9 +115,15 @@ public class JavaAlgorithms {
      *
      * Общий комментарий: решение из Википедии для этой задачи принимается,
      * но приветствуется попытка решить её самостоятельно.
+     * Время: O(N), N = menNumber
+     * Память: O(1)
      */
     static public int josephTask(int menNumber, int choiceInterval) {
-        throw new NotImplementedError();
+        int res = 0;
+        for (int i = 1; i <= menNumber; i++) {
+            res = (res + choiceInterval) % i;
+        }
+        return res + 1;
     }
 
     /**
@@ -98,9 +136,28 @@ public class JavaAlgorithms {
      * При сравнении подстрок, регистр символов *имеет* значение.
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
+     *
+     * Время: O(N*M), N = количество строк в first, M = количество строк в second
+     * Память: O(N*M)
      */
-    static public String longestCommonSubstring(String firs, String second) {
-        throw new NotImplementedError();
+    static public String longestCommonSubstring(String first, String second) {
+        int maxLength = 0;
+        int endPosition = 0;
+        int[][] arr = new int[first.length()][second.length()];
+        for (int i = 0; i < first.length(); i++) {
+            for (int j = 0; j < second.length(); j++) {
+                if (first.charAt(i) == second.charAt(j)) {
+                    if (i != 0 && j != 0 && arr[i - 1][j - 1] != 0) {
+                        arr[i][j] = arr[i - 1][j - 1] + 1;
+                        if (arr[i - 1][j - 1] + 1 > maxLength) {
+                            maxLength = arr[i - 1][j - 1] + 1;
+                            endPosition = i + 1;
+                        }
+                    } else arr[i][j] = 1;
+                }
+            }
+        }
+        return first.substring(endPosition - maxLength, endPosition);
     }
 
     /**
@@ -112,9 +169,26 @@ public class JavaAlgorithms {
      *
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
+     *
+     * Время: O(N*sqrt(N)), N = limit
+     * Память: O(1)
      */
     static public int calcPrimesNumber(int limit) {
-        throw new NotImplementedError();
+        int res = 1;
+        if (limit <= 1) return 0;
+        for (int i = 3; i < limit + 1; i += 2) {
+            if (isPrime(i)) {
+                res++;
+            }
+        }
+        return res;
+    }
+
+    private static boolean isPrime(int n) {
+        for (int m = 3; m < Math.sqrt(n) + 1; m += 2) {
+            if (n % m == 0) return false;
+        }
+        return true;
     }
 
     /**
