@@ -6,6 +6,7 @@ import kotlin.Pair;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -35,36 +36,42 @@ public class JavaAlgorithms {
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
      *
-     * Время: O(N^2), N = количество строк в inputName
+     * Время: O(N), N = количество строк в inputName
      * Память: O(N)
      */
     static public Pair<Integer, Integer> optimizeBuyAndSell(String inputName) throws IOException {
-        FileReader fr = new FileReader(inputName);
-        Scanner scan = new Scanner(fr);
-        ArrayList<Double> arr = new ArrayList<>();
-        double value;
-
-        while (scan.hasNextLine()) {
-            value = Double.parseDouble(scan.nextLine());
-            arr.add(value);
-        }
-
-        double max = 0;
-        int firstInPair = 0;
-        int secondInPair = 0;
-        for (int i = 0; i < arr.size(); i++) {
-            double nowI = arr.get(i);
-            for (int j = i; j < arr.size(); j++) {
-                double nowJ = arr.get(j);
-                double now = nowJ - nowI;
-                if (now > max) {
-                    max = now;
-                    firstInPair = i + 1;
-                    secondInPair = j + 1;
-                }
+        List<Integer> startArray = new ArrayList<>();
+        int now;
+        try (Scanner scan = new Scanner(new FileReader(inputName))) {
+            while (scan.hasNextLine()) {
+                now = Integer.parseInt(scan.nextLine());
+                startArray.add(now);
             }
         }
-        return new Pair(firstInPair, secondInPair);
+
+        List<Integer> array = new ArrayList<>();
+        for (int i = 0; i < startArray.size() - 1; i++) {
+            array.add(startArray.get(i + 1) - startArray.get(i));
+        }
+
+        int sum = 0;
+        int sumBefore = array.get(0);
+        int firstPos = -1;
+        int firstInPair = 0;
+        int secondInPair = 0;
+        for (int i = 0; i < array.size(); i++) {
+            sum += array.get(i);
+            if (sum > sumBefore) {
+                sumBefore = sum;
+                firstInPair = firstPos + 1;
+                secondInPair = i;
+            }
+            if (sum < 0) {
+                sum = 0;
+                firstPos = i;
+            }
+        }
+        return new Pair(firstInPair + 1, secondInPair + 2);
     }
 
     /**
