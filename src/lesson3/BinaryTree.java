@@ -270,7 +270,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         }
         set.add(node.value);
         if (node.right != null) {
-            SortedSet<Comparable> temp = allElements(node.right);
+            SortedSet<Comparable> temp = allElements(node.right); 
             for (int i = 0; i < temp.size(); i++) {
                 set.add((Comparable) temp.toArray()[i]);
             }
