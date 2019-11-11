@@ -52,6 +52,9 @@ abstract class AbstractHeadTailTest {
         for (i in 1..10)
             assertEquals(true, set.contains(i))
 
+        set = tree.headSet(-10)
+        for (i in 1..10)
+            assertEquals(false, set.contains(i))
     }
 
     protected fun doTailSetTest() {
@@ -71,6 +74,9 @@ abstract class AbstractHeadTailTest {
         for (i in 1..10)
             assertEquals(true, set.contains(i))
 
+        set = tree.tailSet(128)
+        for (i in 1..10)
+            assertEquals(false, set.contains(i))
     }
 
     protected fun doHeadSetRelationTest() {

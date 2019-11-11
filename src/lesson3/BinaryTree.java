@@ -1,6 +1,5 @@
 package lesson3;
 
-import kotlin.NotImplementedError;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,8 +71,46 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
      */
     @Override
     public boolean remove(Object o) {
-        // TODO
-        throw new NotImplementedError();
+        if (height() == 0) return false;
+        @SuppressWarnings("unchecked")
+        T t = (T) o;
+        root = remove2(t, root);
+        size--;
+        return true;
+    }
+
+    private Node<T> remove2(T number, Node<T> node) {
+        if (number.compareTo(node.value) < 0) {
+            node.left = remove2(number, node.left);
+        }
+        else {
+            if (number.compareTo(node.value) > 0) {
+                node.right = remove2(number, node.right);
+            }
+            else {
+                if (node.left != null && node.right != null) {
+                    Node<T> minimum = new Node<>(minimum(node.right).value);
+                    minimum.left = node.left;
+                    minimum.right = node.right;
+                    node = minimum;
+                    node.right = remove2(node.value, node.right);
+                }
+                else {
+                    if (node.left != null) {
+                        return node.left;
+                    }
+                    else {
+                        return node.right;
+                    }
+                }
+            }
+        }
+        return node;
+    }
+
+    private Node<T> minimum(Node<T> node) {
+        if (node.left == null) return node;
+        else return minimum(node.left);
     }
 
     @Override
@@ -105,6 +142,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     }
 
     public class BinaryTreeIterator implements Iterator<T> {
+        private Node<T> current = null;
 
         private BinaryTreeIterator() {
             // Добавьте сюда инициализацию, если она необходима
@@ -116,8 +154,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public boolean hasNext() {
-            // TODO
-            throw new NotImplementedError();
+            return next2() != null;
         }
 
         /**
@@ -126,8 +163,40 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public T next() {
-            // TODO
-            throw new NotImplementedError();
+            current = next2();
+            if (current != null) return current.value;
+            return null;
+        }
+
+        Node<T> next2() {
+            if (root == null) return null;
+
+            Node<T> res = null;
+
+            if (current != null) {
+
+                Node<T> now = root;
+                while (now != null) {
+                    if (now.value.compareTo(current.value) > 0) {
+                        res = now;
+                        now = now.left;
+                    } else {
+                        now = now.right;
+                    }
+                }
+
+            }
+            else res = findFirst();
+
+            return res;
+        }
+
+        private Node<T> findFirst() {
+            Node<T> cur = root;
+            while (cur.left != null) {
+                cur = cur.left;
+            }
+            return cur;
         }
 
         /**
@@ -136,8 +205,8 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public void remove() {
-            // TODO
-            throw new NotImplementedError();
+            root = remove2(current.value, root);
+            size--;
         }
     }
 
@@ -166,8 +235,48 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @NotNull
     @Override
     public SortedSet<T> subSet(T fromElement, T toElement) {
-        // TODO
-        throw new NotImplementedError();
+        return subSet2(fromElement, toElement, false);
+    }
+
+    private SortedSet<T> subSet2(T fromElement, T toElement, boolean lessOrEqual) {
+        SortedSet<Comparable> set;
+        SortedSet<T> set2 = new TreeSet<>();
+
+        if (root == null) return set2;
+
+        set = allElements(root);
+
+        for (int i = 0; i < set.size(); i++) {
+            @SuppressWarnings("unchecked")
+            Comparable o = (T) set.toArray()[i];
+            if (lessOrEqual) {
+                if (o.compareTo(fromElement) >= 0 && o.compareTo(toElement) <= 0) set2.add((T) o);
+            }
+            else {
+                if (o.compareTo(fromElement) >= 0 && o.compareTo(toElement) < 0) set2.add((T) o);
+            }
+        }
+
+        return set2;
+    }
+
+    private SortedSet<Comparable> allElements(Node<T> node) {
+        SortedSet<Comparable> set = new TreeSet<>();
+        if (node.left != null) {
+            SortedSet<Comparable> temp = allElements(node.left);
+            for (int i = 0; i < temp.size(); i++) {
+                set.add((Comparable) temp.toArray()[i]);
+            }
+        }
+        set.add(node.value);
+        if (node.right != null) {
+            SortedSet<Comparable> temp = allElements(node.right);
+            for (int i = 0; i < temp.size(); i++) {
+                set.add((Comparable) temp.toArray()[i]);
+            }
+        }
+
+        return set;
     }
 
     /**
@@ -177,8 +286,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @NotNull
     @Override
     public SortedSet<T> headSet(T toElement) {
-        // TODO
-        throw new NotImplementedError();
+        return subSet2(first(), toElement,false);
     }
 
     /**
@@ -188,8 +296,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @NotNull
     @Override
     public SortedSet<T> tailSet(T fromElement) {
-        // TODO
-        throw new NotImplementedError();
+        return subSet2(fromElement, last(),true);
     }
 
     @Override
