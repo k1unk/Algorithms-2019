@@ -275,7 +275,6 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                 set.add((Comparable) temp.toArray()[i]);
             }
         }
-
         return set;
     }
 
