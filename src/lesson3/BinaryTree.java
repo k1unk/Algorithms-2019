@@ -68,6 +68,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     /**
      * Удаление элемента в дереве
      * Средняя
+     *
+     * Трудоемкость - O(height()), если дерево сбалансировано - то O(log(n)), если нет - то O(n)
+     * Ресурсоемкость - О(1)
      */
     @Override
     public boolean remove(Object o) {
@@ -151,6 +154,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         /**
          * Проверка наличия следующего элемента
          * Средняя
+         *
+         * Трудоемкость - O(height()), если дерево сбалансировано - то O(log(n)), если нет - то O(n)
+         * Ресурсоемкость - О(1)
          */
         @Override
         public boolean hasNext() {
@@ -160,6 +166,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         /**
          * Поиск следующего элемента
          * Средняя
+         *
+         * Трудоемкость - O(height()), если дерево сбалансировано - то O(log(n)), если нет - то O(n)
+         * Ресурсоемкость - О(1)
          */
         @Override
         public T next() {
@@ -202,6 +211,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         /**
          * Удаление следующего элемента
          * Сложная
+         *
+         * Трудоемкость - O(height()), если дерево сбалансировано - то O(log(n)), если нет - то O(n)
+         * Ресурсоемкость - О(1)
          */
         @Override
         public void remove() {
@@ -231,6 +243,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     /**
      * Для этой задачи нет тестов (есть только заготовка subSetTest), но её тоже можно решить и их написать
      * Очень сложная
+     *
+     * Трудоемкость - O(n)
+     * Ресурсоемкость - О(n)
      */
     @NotNull
     @Override
@@ -281,6 +296,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     /**
      * Найти множество всех элементов меньше заданного
      * Сложная
+     *
+     * Трудоемкость - O(n)
+     * Ресурсоемкость - О(n)
      */
     @NotNull
     @Override
@@ -291,6 +309,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     /**
      * Найти множество всех элементов больше или равных заданного
      * Сложная
+     *
+     * Трудоемкость - O(n)
+     * Ресурсоемкость - О(n)
      */
     @NotNull
     @Override
