@@ -77,18 +77,17 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         if (height() == 0) return false;
         @SuppressWarnings("unchecked")
         T t = (T) o;
-        root = remove2(t, root);
+        root = remove(t, root);
         size--;
         return true;
     }
-
-    private Node<T> remove2(T number, Node<T> node) {
+    private Node<T> remove(T number, Node<T> node) {
         if (number.compareTo(node.value) < 0) {
-            node.left = remove2(number, node.left);
+            node.left = remove(number, node.left);
         }
         else {
             if (number.compareTo(node.value) > 0) {
-                node.right = remove2(number, node.right);
+                node.right = remove(number, node.right);
             }
             else {
                 if (node.left != null && node.right != null) {
@@ -96,7 +95,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                     minimum.left = node.left;
                     minimum.right = node.right;
                     node = minimum;
-                    node.right = remove2(node.value, node.right);
+                    node.right = remove(node.value, node.right);
                 }
                 else {
                     if (node.left != null) {
@@ -160,7 +159,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public boolean hasNext() {
-            return next2() != null;
+            return findNext() != null;
         }
 
         /**
@@ -172,12 +171,12 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public T next() {
-            current = next2();
+            current = findNext();
             if (current != null) return current.value;
             return null;
         }
 
-        Node<T> next2() {
+        Node<T> findNext() {
             if (root == null) return null;
 
             Node<T> res = null;
@@ -217,7 +216,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public void remove() {
-            root = remove2(current.value, root);
+            root = BinaryTree.this.remove(current.value, root);
             size--;
         }
     }
