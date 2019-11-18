@@ -81,6 +81,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         size--;
         return true;
     }
+
     private Node<T> remove(T number, Node<T> node) {
         if (number.compareTo(node.value) < 0) {
             node.left = remove(number, node.left);
